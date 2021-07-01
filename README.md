@@ -5,12 +5,12 @@ Tester for 2114 SRAM chips
 
 The wiring is outlined in the table below
 
-   Port | Arduino  |  2114
-   -----------------
-   PC0  |A0        |IO1
-   PC1  |A1        |IO2
-   PC2  |A2        |IO3
-   PC3  |A3        |IO4
+Port | Arduino  |  2114
+-----|----------|--------
+PC0  |A0        |IO1
+PC1  |A1        |IO2
+PC2  |A2        |IO3
+PC3  |A3        |IO4
    
    LEDs
    -------------------
