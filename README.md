@@ -1,7 +1,8 @@
-# 2114SRAMTester
-Tester for 2114 SRAM chips
+# 2114 SRAM Tester
 
-2114 SRAM chips are used in the ZX81 they are 4096 bit chips arranged in 1024 rows of 4 bits.  This tester code uses a Arduino to perform various tests on a 2114 chip to check that it is working.
+Tester for 2114 SRAM chips using an Arduino Nano
+
+2114 SRAM chips are used in the ZX81, they are 4096 bit chips arranged in 1024 rows of 4 bits.  This code uses a Arduino Nano to perform various tests on a 2114 chip to check that it is working.
 
 The wiring is outlined in the table below
 
