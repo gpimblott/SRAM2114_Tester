@@ -5,18 +5,13 @@ Tester for 2114 SRAM chips
 
 The wiring is outlined in the table below
 
-   Some standard timings for 2144 Static RAM chips
-   ------------------------------------------------
-   Minimum write pulse time = 150ns
-   Data setup time = 150ns
-   Write cycle time = 300ns
-   PIN definitions
-   Port Arduino   2114
-   -------------------
-   PC0  A0        IO1
-   PC1  A1        IO2
-   PC2  A2        IO3
-   PC3  A3        IO4
+   Port | Arduino  |  2114
+   -----------------
+   PC0  |A0        |IO1
+   PC1  |A1        |IO2
+   PC2  |A2        |IO3
+   PC3  |A3        |IO4
+   
    LEDs
    -------------------
    PC4  A4        Green LED
