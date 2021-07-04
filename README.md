@@ -1,10 +1,10 @@
 # 2114 SRAM Tester
 
-Tester for 2114 SRAM chips using an Arduino Nano
+Tester for 2114 SRAM chips using an Arduino Nano. The code can be loaded into the standard Arduino IDE for uploading/editing.
 
 2114 SRAM chips are used in the ZX81, they are 4096 bit chips arranged in 1024 rows of 4 bits.  This code uses a Arduino Nano to perform various tests on a 2114 chip to check that it is working.
 
-The wiring is outlined in the table below
+The prototype wiring (v01) is outlined in the table below
 
 Port | Arduino  |  2114
 -----|----------|--------
@@ -30,4 +30,5 @@ PB4  |12        |A8
 PB5  |13        |A9
 
 
-I also intend to provide gerber files to create boards for a more professional projects.
+The project is currently is currently at the prototype stage but I am working on a PCB design which should hopefully be available soon.
+![Prototype](/images/prototype.jpg)
