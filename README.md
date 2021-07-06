@@ -31,4 +31,7 @@ PB5  |13        |A9
 
 
 The project is currently is currently at the prototype stage but I am working on a PCB design which should hopefully be available soon.
+
 ![Prototype](/images/prototype.jpg)
+
+![Kicad board design](/images/board_v01.png)
