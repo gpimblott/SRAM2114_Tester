@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 10)
+    (drawings 9)
     (tracks 107)
     (zones 0)
     (modules 7)
@@ -30,7 +30,7 @@
     (46 B.CrtYd user)
     (47 F.CrtYd user)
     (48 B.Fab user)
-    (49 F.Fab user hide)
+    (49 F.Fab user)
   )
 
   (setup
@@ -60,7 +60,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 0 0)
     (grid_origin 148.59 49.53)
-    (visible_elements 7FFFF7FF)
+    (visible_elements 7FFFFFFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -986,18 +986,6 @@
     )
   )
 
-  (dimension 67.31 (width 0.05) (layer F.CrtYd)
-    (gr_text "67.310 mm" (at 123.825 50.73) (layer F.CrtYd)
-      (effects (font (size 1 1) (thickness 0.15)))
-    )
-    (feature1 (pts (xy 157.48 49.53) (xy 157.48 50.116421)))
-    (feature2 (pts (xy 90.17 49.53) (xy 90.17 50.116421)))
-    (crossbar (pts (xy 90.17 49.53) (xy 157.48 49.53)))
-    (arrow1a (pts (xy 157.48 49.53) (xy 156.353496 50.116421)))
-    (arrow1b (pts (xy 157.48 49.53) (xy 156.353496 48.943579)))
-    (arrow2a (pts (xy 90.17 49.53) (xy 91.296504 50.116421)))
-    (arrow2b (pts (xy 90.17 49.53) (xy 91.296504 48.943579)))
-  )
   (gr_line (start 157.48 111.76) (end 90.17 111.76) (layer Edge.Cuts) (width 0.05) (tstamp 60E3BB0B))
   (gr_line (start 157.48 49.53) (end 157.48 111.76) (layer Edge.Cuts) (width 0.05))
   (gr_line (start 90.17 49.53) (end 157.48 49.53) (layer Edge.Cuts) (width 0.05))

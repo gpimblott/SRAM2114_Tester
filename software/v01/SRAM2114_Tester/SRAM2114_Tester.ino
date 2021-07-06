@@ -2,8 +2,13 @@
    Basic 2114 Static RAM tester
 
    The 2114 is a 4096 bit static ram chip organised as 1024 4 bit values
-
    This type of RAM is used on the ZX81.
+
+   Both LED's are lit for 1 second at startup.
+   The button can then be used to start/start testing.
+   The green led flashes during testing
+   The red led will be lit following a test failure
+   Both leds will be off when tests are not running
 */
 
 /*
@@ -22,10 +27,14 @@
    PC2  A2        IO3
    PC3  A3        IO4
 
-   LEDs
+   LEDs & Pushbutton
    -------------------
    PC4  A4        Green LED
    PC5  A5        Red LED
+
+   // A6 & A7 can only be analog inputs and don't have internal pulls
+   // But that's all I have left to work with
+   PC6  A6        Switch
 
    Special
    -------------------
@@ -47,26 +56,29 @@
    PB4  12        A8
    PB5  13        A9
 */
-// Constants
 #define MAX_ADDRESS 1024
 #define MAX_VALUE 16
 #define NUM_BITS 4
 
+// Data pins
+#define DATA_PINS 0b00001111    // A0...A3
 
 // LED pins
-#define GREEN_LED  (1<<4)
-#define RED_LED    (1<<5)
+#define GREEN_LED  0b00010000   // A4
+#define RED_LED    0b00100000   // A5
 
 // The serial pins are PD0 and PD1
-#define SERIAL_PINS 0b00000011
+#define SERIAL_PINS 0b00000011  // D0 & D1
 
 // RAM pins
-#define RAM_CS     0b00000100  // Active Low
-#define RAM_WE     0b00001000  // Active Low
+#define RAM_CS     0b00000100  // Active Low - D2
+#define RAM_WE     0b00001000  // Active Low - D3
 
 // Helper Macros for the LEDS
 #define green_led_on()  PORTC |= GREEN_LED
 #define green_led_off() PORTC &= ~GREEN_LED
+#define toggle_green_led() PORTC ^= GREEN_LED
+
 #define red_led_on()    PORTC |= RED_LED
 #define red_led_off()   PORTC &= ~RED_LED
 
@@ -78,17 +90,29 @@
 #define enable_we()     PORTD &= (~RAM_WE)
 #define disable_we()    PORTD |= (RAM_WE | SERIAL_PINS)
 
-#define disable_ram()  PORTD |= (RAM_WE | RAM_CS | SERIAL_PINS)
+#define disable_ram()   PORTD |= (RAM_WE | RAM_CS | SERIAL_PINS)
 
+#define data_in()       DDRC = RED_LED | GREEN_LED;               // LED's output rest input
+#define data_out()      DDRC = RED_LED | GREEN_LED | DATA_PINS;   // 0110 1111 - ALL Output except switch
 
-#define data_in()       DDRC = 0b00110000;        // 0011 0000 - 4 bits input and 2 bits output
-#define data_out()      DDRC = 0b00111111;        // 0011 1111 - 4 bits output and 2 bits output
-
+#define SWITCH_PIN  A6
 
 /**
    Global variables
 */
-boolean test_state = false;
+enum stateModel {
+  stopped,
+  running,
+  failed
+};
+
+stateModel test_running = stopped;
+
+// Button debounce variables
+boolean buttonValue = false;
+boolean previousButtonValue = false;
+unsigned long lastDebounceTime = 0L;
+unsigned long debounceDelay = 50;
 
 /**
    Setup the direction of the pins
@@ -98,52 +122,114 @@ void setup() {
   // Setup the serial debug
   Serial.begin(115200);
 
-  // IO pins*4 (IN) and LED pins*2 (OUT)
-  DDRC = 0b00110000;       // 0011 0000 - 4 bits input and 2 bits output
+  // IO pins*4 (IN = 0) and LED pins*2 (OUT = 1)
+  DDRC = RED_LED | GREEN_LED;
   // All output but leave serial lines alone (PD0 and PD1)
   DDRD |=  0b11111100;     // 1111 1100
-  // A4-9 outputs
+  // A4-A9 outputs
   DDRB = 0b00111111;       // 0011 1111
+
+  // define switch with internal pullup
+  pinMode( SWITCH_PIN, INPUT );
 
   // Set the initial state of the Chip select and write enabled to OFF
   disable_cs();
   disable_we();
 
-  Serial.println("Starting tests");
-  test_state = true;
-  
+  Serial.println("Ready");
   green_led_on();
-  red_led_off();
+  red_led_on();
+
+  delay(1000);
+  set_test_state(stopped);
 }
 
 /**
    Run the main test loop
 */
 void loop() {
-  // Run the tests until one fails
-  if ( test_state ) {
+  check_button();
 
-    Serial.println("Performing test loop");
+  if ( test_running == running ) {
+    toggle_green_led();
+    
     if (!test_sequence() ) {
       Serial.println("Sequence test failed");
-      test_state = false;
+      set_test_state( failed );
     }
     else if (!test_sequence2() ) {
       Serial.println("Sequence2 test failed");
-      test_state = false;
+      set_test_state( failed );
     }
     else if (!test_sliding_bit() ) {
       Serial.println("Sliding bit test failed");
-      test_state = false;
+      set_test_state( failed );
     }
     else if (!test_checker_board() ) {
       Serial.println("Checker board test failed");
-      test_state = false;
+      set_test_state( failed );
     }
-  } else {
-    green_led_off();
-    red_led_on();
+    
   }
+}
+
+/*
+   Check if the button has been pressed
+   Includes simple button debounce
+*/
+void check_button() {
+  boolean pressed = false;
+
+  if ( analogRead(SWITCH_PIN) <= 10 ) {
+    pressed = true;
+  }
+
+  if ( pressed && !previousButtonValue) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if ( pressed && !buttonValue) {
+      switch ( test_running ) {
+        case running :
+          set_test_state( stopped );
+          break;
+        case stopped :
+          set_test_state( running );
+          break;
+        case failed :
+          set_test_state( stopped );
+          break;
+      }
+    }
+    buttonValue = pressed;
+  }
+  previousButtonValue = pressed;
+}
+
+/**
+   Set the status of the LEDS and whether the tests are running
+*/
+void set_test_state(stateModel state) {
+  switch (state) {
+    case stopped :
+      green_led_off();
+      red_led_off();
+      Serial.println("Test state : stopped");
+      break;
+    case running :
+      green_led_on();
+      red_led_off();
+      Serial.println("Test state : running");
+      break;
+    case failed :
+      green_led_off();
+      red_led_on();
+      Serial.println("Test state : failed");
+      break;
+  }
+
+  test_running = state;
 }
 
 /*********************************************************
