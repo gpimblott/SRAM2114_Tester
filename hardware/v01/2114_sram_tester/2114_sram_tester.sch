@@ -60,18 +60,18 @@ $EndComp
 $Comp
 L power:+5V #PWR0102
 U 1 1 60DFCCB0
-P 5000 4650
-F 0 "#PWR0102" H 5000 4500 50  0001 C CNN
-F 1 "+5V" H 5015 4823 50  0000 C CNN
-F 2 "" H 5000 4650 50  0001 C CNN
-F 3 "" H 5000 4650 50  0001 C CNN
-	1    5000 4650
+P 4800 5200
+F 0 "#PWR0102" H 4800 5050 50  0001 C CNN
+F 1 "+5V" H 4815 5373 50  0000 C CNN
+F 2 "" H 4800 5200 50  0001 C CNN
+F 3 "" H 4800 5200 50  0001 C CNN
+	1    4800 5200
 	0    -1   -1   0   
 $EndComp
-Text GLabel 5200 4650 2    50   Output ~ 0
+Text GLabel 5000 5200 2    50   Output ~ 0
 5vPower
 Wire Wire Line
-	5000 4650 5200 4650
+	4800 5200 5000 5200
 Text GLabel 2650 2300 1    50   Input ~ 0
 5vPower
 Wire Wire Line
@@ -325,8 +325,6 @@ NoConn ~ 2950 3000
 NoConn ~ 2950 3300
 NoConn ~ 1950 3000
 NoConn ~ 1950 2900
-NoConn ~ 2950 4200
-NoConn ~ 2950 4100
 Wire Wire Line
 	2550 4500 2550 4550
 Wire Wire Line
@@ -396,4 +394,61 @@ Wire Wire Line
 	2450 4500 2450 4550
 Wire Wire Line
 	2450 4550 1800 4550
+Text GLabel 3350 4400 2    50   Input ~ 0
+Switch
+Wire Wire Line
+	3350 4400 3100 4400
+Wire Wire Line
+	3100 4400 3100 4100
+Wire Wire Line
+	3100 4100 2950 4100
+NoConn ~ 2950 4200
+Text GLabel 9650 3200 2    50   Input ~ 0
+Switch
+Text GLabel 9350 3850 3    50   Output ~ 0
+5vPower
+$Comp
+L Device:R R3
+U 1 1 60F72965
+P 9350 3500
+F 0 "R3" H 9420 3546 50  0000 L CNN
+F 1 "10K Ohms" H 9420 3455 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal" V 9280 3500 50  0001 C CNN
+F 3 "~" H 9350 3500 50  0001 C CNN
+	1    9350 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9350 3650 9350 3850
+Wire Wire Line
+	9350 3350 9350 3200
+Wire Wire Line
+	9350 3200 9650 3200
+$Comp
+L Switch:SW_Push SW1
+U 1 1 60F78C56
+P 8900 3200
+F 0 "SW1" H 8900 3485 50  0000 C CNN
+F 1 "SW_Push" H 8900 3394 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm" H 8900 3400 50  0001 C CNN
+F 3 "~" H 8900 3400 50  0001 C CNN
+	1    8900 3200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9100 3200 9350 3200
+Connection ~ 9350 3200
+$Comp
+L power:GND #PWR01
+U 1 1 60F7B889
+P 8400 3200
+F 0 "#PWR01" H 8400 2950 50  0001 C CNN
+F 1 "GND" V 8405 3072 50  0000 R CNN
+F 2 "" H 8400 3200 50  0001 C CNN
+F 3 "" H 8400 3200 50  0001 C CNN
+	1    8400 3200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8700 3200 8400 3200
 $EndSCHEMATC
