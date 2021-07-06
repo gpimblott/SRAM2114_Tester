@@ -169,7 +169,6 @@ void loop() {
       Serial.println("Checker board test failed");
       set_test_state( failed );
     }
-    
   }
 }
 
