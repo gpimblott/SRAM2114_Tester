@@ -14,6 +14,7 @@ PC2  |A2        |IO3
 PC3  |A3        |IO4
 PC4  |A4        |Green LED
 PC5  |A5        |Red LED
+PC6  |A6        |Switch
 PD0  |0         |Serial (Debug) - leave empty for USB
 PD1  |1         |Serial (Debug) - leave empty for USB
 PD2  |2         |/CS (Chip Select)
